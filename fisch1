@@ -1,0 +1,114 @@
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/ionlyusegithubformcmods/1-Line-Scripts/main/Mobile%20Friendly%20Orion')))() --This Will Load The Script Code
+local Player = game.Players.LocalPlayer --This Will Reveal The Player Name
+local Window = OrionLib:MakeWindow({
+    Name = "WAKAPOOP KEY SYSTEM",
+    HidePremium = false,
+    SaveConfig = true,
+    ConfigFolder = "OrionTest",
+    IntroText = "Loading Script..."
+}) --This Will Load The Script Hub
+ 
+function MakeScriptHub()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/NYX8HUB/premium/refs/heads/main/script"))()
+end
+ 
+OrionLib:MakeNotification({
+    Name = "Logged In!",
+    Content = "You need key "..Player.Name..".",
+    Image = "rbxassetid://4483345998",
+    Time = 5
+}) --Notification
+ 
+-- List of valid keys
+getgenv().Keys = {
+    "XKTAR59AKALA", -- First valid key
+    "AFTJEFH5ZGFNT",    -- Second valid key
+    "LORYIVZKIYV813",  -- Third valid key
+    "GRTKYPITMV5811",  -- Third valid key
+    "ZXCFSDTRQ65254",  -- Third valid key
+    "FZMYKGLFUIV4916",  -- Third valid key
+    "GZJMVIRLYUQAX0791",  -- Third valid key
+    "GMTYJEWMRYK3160",  -- Third valid key
+    "XHKADYUIHJA1850",  -- Third valid key
+    "SDLGTMUMKX5910"  -- Third valid key
+}
+ 
+getgenv().KeyInput = "string" --Require For The Key To Work
+ 
+local Tab = Window:MakeTab({
+    Name = "Key",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+}) --Making A Tab
+ 
+Tab:AddTextbox({
+    Name = "Key",
+    Default = "Enter Key.",
+    TextDisappear = true,
+    Callback = function(Value)
+        getgenv().KeyInput = Value
+    end
+}) --You Will Enter The Key Here
+ 
+Tab:AddButton({
+    Name = "Check Key",
+    Callback = function()
+        local keyFound = false
+        -- Check if the inputted key is in the list of valid keys
+        for _, validKey in ipairs(getgenv().Keys) do
+            if getgenv().KeyInput == validKey then
+                keyFound = true
+                break
+            end
+        end
+ 
+        if keyFound then
+            OrionLib:MakeNotification({
+                Name = "Checking Key",
+                Content = "Checking The Key You Entered",
+                Image = "rbxassetid://4483345998",
+                Time = 5
+            })
+            wait(2)
+            OrionLib:MakeNotification({
+                Name = "Correct Key!",
+                Content = "The key you entered is Correct.",
+                Image = "rbxassetid://4483345998",
+                Time = 5
+            })
+            wait(1)
+            OrionLib:Destroy()
+            wait(.3)
+            MakeScriptHub()
+        else
+            OrionLib:MakeNotification({
+                Name = "Checking Key",
+                Content = "Checking The Key You Entered",
+                Image = "rbxassetid://4483345998",
+                Time = 5
+            })
+            wait(2)
+            OrionLib:MakeNotification({
+                Name = "Incorrect Key!",
+                Content = "The key you entered is incorrect.",
+                Image = "rbxassetid://4483345998",
+                Time = 5
+            })
+        end
+    end
+}) --This Will Check The Key You Entered
+Tab:AddButton({
+    Name = "Get Key ( Discord ) ",
+    Callback = function()
+        local customText = "https://discord.gg/xf8QaeNcdu" -- Change this to whatever text you want to copy
+        setclipboard(customText) -- Copies the custom text to clipboard
+        OrionLib:MakeNotification({
+            Name = "Copied!",
+            Content = "Successfully copied",
+            Image = "rbxassetid://4483345998",
+            Time = 5
+        })
+    end
+})
+ 
+OrionLib:Init() --Require If The Script Is Done
